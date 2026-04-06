@@ -32,4 +32,4 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: martins-bicep-web-demo-001
-          package: ./site
+          package: ./site.zip
