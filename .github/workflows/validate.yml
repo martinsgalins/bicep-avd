@@ -1,0 +1,28 @@
+name: Validate Bicep
+
+on:
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure CLI version
+        run: az version
+
+      - name: Validate dev parameters
+        run: |
+          az bicep build --file infra/main.bicep
+          az deployment sub validate \
+            --location northeurope \
+            --template-file infra/main.bicep \
+            --parameters @infra/main.dev.bicepparam
