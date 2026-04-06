@@ -56,7 +56,7 @@ resource app 'Microsoft.Web/sites@2023-12-01' = {
       minTlsVersion: '1.2'
       alwaysOn: !isFreeOrShared
       ftpsState: 'Disabled'
-      linuxFxVersion: 'NODE|18-lts'
+      linuxFxVersion: 'NODE|22-lts'
     }
   }
   tags: tags
