@@ -1,0 +1,46 @@
+name: Deploy Web App Infrastructure
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'infra/webapp/**'
+      - '.github/workflows/deploy-webapp-infra.yml'
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Ensure resource group exists
+        run: |
+          az group show --name rg-bicep-demo-dev
+
+      - name: What-if web app infra
+        run: |
+          az deployment group what-if \
+            --resource-group rg-bicep-demo-dev \
+            --parameters infra/webapp/main.dev.bicepparam
+
+      - name: Deploy web app infra
+        run: |
+          az deployment group create \
+            --resource-group rg-bicep-demo-dev \
+            --name "deploy-webapp-infra-${{ github.run_number }}" \
+            --parameters infra/webapp/main.dev.bicepparam
