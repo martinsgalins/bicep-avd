@@ -47,10 +47,10 @@ jobs:
         run: |
           az deployment sub what-if \
           --location northeurope \
-          --parameters infra/main.dev.bicepparam
+          --parameters infra/subscription/main.dev.bicepparam
 
       - name: Deploy
         run: |
           az deployment sub create \
           --location northeurope \
-          --parameters infra/main.dev.bicepparam
+          --parameters infra/subscription/main.dev.bicepparam
