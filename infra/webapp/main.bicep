@@ -40,7 +40,7 @@ resource plan 'Microsoft.Web/serverfarms@2023-12-01' = {
     capacity: 1
   }
   properties: {
-    reserved: false
+    reserved: true
   }
   tags: tags
 }
@@ -48,7 +48,7 @@ resource plan 'Microsoft.Web/serverfarms@2023-12-01' = {
 resource app 'Microsoft.Web/sites@2023-12-01' = {
   name: webAppName
   location: location
-  kind: 'app'
+  kind: 'app, linux'
   properties: {
     serverFarmId: plan.id
     httpsOnly: true
@@ -56,6 +56,7 @@ resource app 'Microsoft.Web/sites@2023-12-01' = {
       minTlsVersion: '1.2'
       alwaysOn: !isFreeOrShared
       ftpsState: 'Disabled'
+      linuxFxVersion: 'NODE|18-lts'
     }
   }
   tags: tags
